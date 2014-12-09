@@ -1,4 +1,8 @@
 locjam-extractor
 ================
 
-LocJam15 translator for Twine
+usage:
+
+    python export_v1.py <URL> <origin_language> [<Destination_languages...>]
+
+
