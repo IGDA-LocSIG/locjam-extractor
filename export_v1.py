@@ -50,7 +50,7 @@ import uuid
 
 def compress(origin, file, langs):
 
-	mongooses = ["mongoose-lua-sqlite-ssl-static-x86_64-5.2", "Mongoose-free-5.5.dmg", "mongoose-free-5.5.exe"]
+	mongooses = ["mongoose-linux", "mongoose-osx.dmg", "mongoose-win.exe"]
 	zname = str(uuid.uuid4())+".zip"
 	with zipfile.ZipFile(zname, 'w', zipfile.ZIP_DEFLATED) as myzip:
 		myzip.write(origin)
