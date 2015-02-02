@@ -15,28 +15,32 @@ def export(url, langs, splitline=None):
 	if splitline:
 		splitline = splitline[0]
 	store = soup.find(id="storeArea")
-	rows = []
+
 	split_stuff = []
+	rows = []
 	split_row = 0
 	row = 0
+
 	for twee in store.find_all("div"):
-		if not twee.string.startswith("data:") and not "background-size" in twee.string and not "\"requires jQuery\"" in twee.string and not "(function (" in twee.string and not "#storyTitle" in twee.string:
+		if not twee.string.startswith("data:") and not "background-size" in twee.string and not "\"requires jQuery\"" in twee.string and not "(function (" in twee.string and not "#storyTitle" in twee.string and not "jquery:" in twee.string:
 			#t = t.replace(twee.string, "twine_trans(%s);" % str(row))
 			tw = twee.string
-			if splitline in tw:
-				stw = tw.split(splitline)
-				try:
-					i = split_stuff.index(stw[1])
-					twee["data-split"] = i
-				except:
-					split_stuff.append(stw[1])
-					twee["data-split"] = split_row
-					split_row += 1
-				rows.append(stw[0])
+			if splitline:
+				if splitline in tw:
+					stw = tw.split(splitline)
+					try:
+						i = split_stuff.index(stw[1])
+						twee["data-split"] = i
+					except:
+						split_stuff.append(stw[1])
+						twee["data-split"] = split_row
+						split_row += 1
+					rows.append(stw[0])
+				else:
+					rows.append(tw)
 			else:
 				rows.append(tw)
 			twee["data-trans"] = "twine_trans(%s);" % str(row)
-
 			row += 1
 	t = soup.prettify();
 
@@ -56,6 +60,7 @@ def export(url, langs, splitline=None):
 	with open(".".join(origin), "wb") as h: 
 		h.write(old_t)
 
+	print len(rows), row
 	translateable = "\n".join(rows)
 	if splitline:
 		translateable += "\n" + splitline + "\n" + "\n".join(split_stuff)
@@ -95,7 +100,7 @@ if __name__ == "__main__":
 		langs_list.append(lang)
 	print args.splitline
 	origin, file_name = export (args.url[0], langs_list, args.splitline)
-	print compress(origin, file_name, args.langs)
+	print compress(origin, file_name, langs_list)
 
 	
 	
